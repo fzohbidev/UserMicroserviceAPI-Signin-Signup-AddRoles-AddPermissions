@@ -1,6 +1,7 @@
 
 package com.example.UserMicroserviceAPI.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -9,6 +10,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.JoinColumn;
+
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -20,17 +23,18 @@ public class Authority {
     private Long id;
     
     private String Authority;
+    private String description;
     
     @ManyToMany(mappedBy = "Authority")
     private Set<User> User;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinTable(
         name = "authority_permissions",
         joinColumns = @JoinColumn(name = "authority_id"),
         inverseJoinColumns = @JoinColumn(name = "permission_id")
     )
-    private Set<Permission> permissions;
+     private Set<Permission> permissions = new HashSet<>();
 
     // Getters and setters
     public Long getId() {
@@ -47,6 +51,14 @@ public class Authority {
 
     public void setAuthority(String Authority) {
         this.Authority = Authority;
+    }
+
+    public String getAuthorityDescription() {
+        return description;
+    }
+
+    public void setAuthorityDescription(String description) {
+        this.description = description;
     }
 
     public Set<User> getUsers() {

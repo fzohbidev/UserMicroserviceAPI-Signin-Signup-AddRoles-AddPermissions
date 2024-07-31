@@ -20,6 +20,7 @@ public class Permission {
     private Long id;
 
     private String permission;
+    private String description;
 
     @ManyToMany(mappedBy = "permissions")
     private Set<Authority> authorities;
@@ -39,6 +40,14 @@ public class Permission {
 
     public void setPermission(String permission) {
         this.permission = permission;
+    }
+
+    public String getPermissionDescription() {
+        return description;
+    }
+
+    public void setPermissioinDescription(String description) {
+        this.description = description;
     }
 
     public Set<Authority> getAuthorities() {

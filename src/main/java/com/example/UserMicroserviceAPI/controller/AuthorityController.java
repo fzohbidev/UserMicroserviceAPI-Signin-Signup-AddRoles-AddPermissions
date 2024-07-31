@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -21,8 +22,12 @@ public class AuthorityController {
     }
 
     @PostMapping
-    public ResponseEntity<Authority> createAuthority(@RequestBody Authority authority) {
-        Authority savedAuthority = authorityService.save(authority);
-        return ResponseEntity.ok(savedAuthority);
+    public ResponseEntity<List<Authority>> createRoles(@RequestBody List<Authority> roles) {
+        List<Authority> createdRoles = new ArrayList<>();
+        for (Authority role : roles) {
+            Authority createdRole = authorityService.createAuthorityWithPermissions(role);
+            createdRoles.add(createdRole);
+        }
+        return ResponseEntity.ok(createdRoles);
     }
 }
