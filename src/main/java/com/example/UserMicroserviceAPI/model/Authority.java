@@ -1,6 +1,10 @@
 
 package com.example.UserMicroserviceAPI.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -17,24 +21,27 @@ import java.util.Set;
 
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+
 public class Authority {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     private String Authority;
     private String description;
-    
+
     @ManyToMany(mappedBy = "Authority")
     private Set<User> User;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
-        name = "authority_permissions",
-        joinColumns = @JoinColumn(name = "authority_id"),
-        inverseJoinColumns = @JoinColumn(name = "permission_id")
+            name = "authority_permissions",
+            joinColumns = @JoinColumn(name = "authority_id"),
+            inverseJoinColumns = @JoinColumn(name = "permission_id")
     )
-     private Set<Permission> permissions = new HashSet<>();
+    private Set<Permission> permissions = new HashSet<>();
 
     // Getters and setters
     public Long getId() {

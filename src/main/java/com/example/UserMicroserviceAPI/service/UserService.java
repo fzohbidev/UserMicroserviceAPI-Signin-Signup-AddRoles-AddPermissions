@@ -30,7 +30,7 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-    
+
 
     @Transactional
     public User registerUser(SignupRequest signupRequest) {

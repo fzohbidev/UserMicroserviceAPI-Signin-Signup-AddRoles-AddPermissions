@@ -46,11 +46,18 @@ public class SecurityConfig {
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.jdbcAuthentication()
-            .dataSource(dataSource)
-            .usersByUsernameQuery("select `username`, `password`,`enabled` from User where `username`=?")
-            .authoritiesByUsernameQuery("select u.username , u.password , u.enabled, a.authority from Authority a inner join user_authorities ua on a.id = ua.authority_id inner join User u on ua.user_id = u.id where u.username=?")
-            .passwordEncoder(passwordEncoder());
+                .dataSource(dataSource)
+                .usersByUsernameQuery("select `username`, `password`,`enabled` from user where `username`=?")
+                .authoritiesByUsernameQuery(
+                        "select u.username, a.authority " +
+                                "from user u " +
+                                "join user_authorities ua on u.id = ua.user_id " +
+                                "join authority a on ua.authority_id = a.id " +
+                                "where u.username = ?"
+                )
+                .passwordEncoder(passwordEncoder());
     }
+
 
     @Bean
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
@@ -67,8 +74,18 @@ public class SecurityConfig {
     }
 
     @Bean
-    public UserDetailsService userDetailsService(DataSource dataSource) {
-        return new JdbcUserDetailsManager(dataSource);
+    public UserDetailsService userDetailsService() {
+        JdbcUserDetailsManager manager = new JdbcUserDetailsManager();
+        manager.setDataSource(dataSource);
+        manager.setUsersByUsernameQuery("select `username`, `password`,`enabled` from user where `username`=?");
+        manager.setAuthoritiesByUsernameQuery(
+                "select u.username, a.authority " +
+                        "from user u " +
+                        "join user_authorities ua on u.id = ua.user_id " +
+                        "join authority a on ua.authority_id = a.id " +
+                        "where u.username = ?"
+        );
+        return manager;
     }
 
     // @Bean

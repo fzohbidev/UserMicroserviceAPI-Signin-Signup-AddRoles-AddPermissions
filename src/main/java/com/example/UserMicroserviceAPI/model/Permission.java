@@ -9,6 +9,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.JoinColumn;
+
+import java.util.HashSet;
 import java.util.Set;
 
 import java.util.Set;
@@ -23,7 +25,7 @@ public class Permission {
     private String description;
 
     @ManyToMany(mappedBy = "permissions")
-    private Set<Authority> authorities;
+    private Set<Authority> authorities = new HashSet<>();;
 
     // Getters and setters
     public Long getId() {

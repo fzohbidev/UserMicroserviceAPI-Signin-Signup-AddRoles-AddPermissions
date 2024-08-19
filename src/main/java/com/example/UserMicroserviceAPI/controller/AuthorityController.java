@@ -2,6 +2,7 @@
 package com.example.UserMicroserviceAPI.controller;
 
 import com.example.UserMicroserviceAPI.model.Authority;
+import com.example.UserMicroserviceAPI.model.AuthorityDto;
 import com.example.UserMicroserviceAPI.service.AuthorityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,18 +17,18 @@ public class AuthorityController {
     @Autowired
     private AuthorityService authorityService;
 
-    @GetMapping
-    public List<Authority> getAllAuthorities() {
-        return authorityService.findAll();
+    @PostMapping
+    public ResponseEntity<String> createRoles(@RequestBody List<AuthorityDto> roles) {
+        for (AuthorityDto roleDTO : roles) {
+            authorityService.createAuthorityWithPermissions(roleDTO);
+        }
+        return ResponseEntity.ok(roles.size() + " authorities added successfully");
     }
 
-    @PostMapping
-    public ResponseEntity<List<Authority>> createRoles(@RequestBody List<Authority> roles) {
-        List<Authority> createdRoles = new ArrayList<>();
-        for (Authority role : roles) {
-            Authority createdRole = authorityService.createAuthorityWithPermissions(role);
-            createdRoles.add(createdRole);
-        }
-        return ResponseEntity.ok(createdRoles);
+    @GetMapping
+    public ResponseEntity<List<AuthorityDto>> getAllAuthorities() {
+        List<AuthorityDto> authorities = authorityService.findAll();
+        return ResponseEntity.ok(authorities);
     }
 }
+
