@@ -1,21 +1,14 @@
 package com.example.UserMicroserviceAPI.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.JoinColumn;
+import jakarta.persistence.*;
+
 import java.util.Set;
 
 
 @Entity
 @Table(name = "user_authorities")
 public class UserAuthority {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,6 +22,8 @@ public class UserAuthority {
     @JoinColumn(name = "authority_id")
     private Authority authority;
 
+    @Version
+    private Long version;
     // Default constructor
     public UserAuthority() {
     }

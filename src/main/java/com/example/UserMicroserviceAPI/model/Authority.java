@@ -18,22 +18,18 @@ import jakarta.persistence.JoinColumn;
 import java.util.HashSet;
 import java.util.Set;
 
-
-
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-
 public class Authority {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String Authority;
+    private String authority;  // Updated to lowercase
     private String description;
 
-    @ManyToMany(mappedBy = "Authority")
-    private Set<User> User;
-
+    @ManyToMany(mappedBy = "authorities")  // Updated to match User entity
+    private Set<User> users;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
@@ -42,8 +38,6 @@ public class Authority {
             inverseJoinColumns = @JoinColumn(name = "permission_id")
     )
     private Set<Permission> permissions = new HashSet<>();
-
-    // Getters and setters
     public Long getId() {
         return id;
     }
@@ -53,11 +47,11 @@ public class Authority {
     }
 
     public String getAuthority() {
-        return Authority;
+        return authority;
     }
 
     public void setAuthority(String Authority) {
-        this.Authority = Authority;
+        this.authority = Authority;
     }
 
     public String getAuthorityDescription() {
@@ -69,11 +63,11 @@ public class Authority {
     }
 
     public Set<User> getUsers() {
-        return User;
+        return users;
     }
 
-    public void setUsers(Set<User> User) {
-        this.User = User;
+    public void setUsers(Set<User> Users) {
+        this.users = Users;
     }
 
     public Set<Permission> getPermissions() {

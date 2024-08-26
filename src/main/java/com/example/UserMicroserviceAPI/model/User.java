@@ -14,10 +14,8 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.JoinColumn;
 import java.util.Set;
-
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,13 +31,11 @@ public class User {
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
-        name = "user_authorities",
-        joinColumns = @JoinColumn(name = "user_id"),
-        inverseJoinColumns = @JoinColumn(name = "authority_id")
+            name = "user_authorities",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "authority_id")
     )
-    private Set<Authority> Authority;
-
-    // Getters and setters
+    private Set<Authority> authorities;  // Updated to lowercase and plural
     public Long getId() {
         return id;
     }
@@ -105,10 +101,10 @@ public class User {
     }
 
     public Set<Authority> getAuthorities() {
-        return Authority;
+        return authorities;
     }
 
     public void setAuthorities(Set<Authority> Authority) {
-        this.Authority = Authority;
+        this.authorities = Authority;
     }
 }

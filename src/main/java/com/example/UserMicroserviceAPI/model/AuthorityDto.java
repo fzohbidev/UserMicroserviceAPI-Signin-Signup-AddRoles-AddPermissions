@@ -1,7 +1,6 @@
 package com.example.UserMicroserviceAPI.model;
 
 import java.util.Set;
-
 public class AuthorityDto {
     private long id;
     private String authority;
